@@ -1,9 +1,10 @@
 package util;
 
 import bank.domain.Account;
-import java.sql.SQLException;
+
 import javax.persistence.EntityManager;
 import javax.persistence.metamodel.EntityType;
+import java.sql.SQLException;
 
 public class DatabaseCleaner {
 
