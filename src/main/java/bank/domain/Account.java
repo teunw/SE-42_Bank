@@ -1,19 +1,13 @@
 package bank.domain;
 
+import javax.persistence.*;
 import java.io.Serializable;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 
 @Entity
 @NamedQueries({
-    @NamedQuery(name = "Account.getAll", query = "select a from Account as a"),
-    @NamedQuery(name = "Account.count", query = "select count(a) from Account as a"),
-    @NamedQuery(name = "Account.findByAccountNr", query = "select a from Account as a where a.accountNr = :accountNr")
+        @NamedQuery(name = "Account.getAll", query = "select a from Account as a"),
+        @NamedQuery(name = "Account.count", query = "select count(a) from Account as a"),
+        @NamedQuery(name = "Account.findByAccountNr", query = "select a from Account as a where a.accountNr = :accountNr")
 })
 public class Account implements Serializable {
 
@@ -28,7 +22,7 @@ public class Account implements Serializable {
     public Account() {
     }
 
-    public Account(Long accountNr){
+    public Account(Long accountNr) {
         balance = 0L;
         threshold = 0L;
         this.accountNr = accountNr;
