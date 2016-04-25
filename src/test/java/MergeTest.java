@@ -10,6 +10,13 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import java.sql.SQLException;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertFalse;
+
+/**
+ * Created by wouter on 25-4-2016.
 import static org.junit.Assert.*;
 
 /**
@@ -20,6 +27,10 @@ public class MergeTest {
     private EntityManager em;
     private EntityManagerFactory emf;
 
+    @Before
+    public void before() {
+        emf = Persistence.createEntityManagerFactory("bankPU");
+        em = emf.createEntityManager();
     private AccountDAOJPAImpl accountDAOJPA;
 
     @Before
@@ -48,11 +59,13 @@ public class MergeTest {
         Account acc2 = new Account(2L);
         Account acc9 = new Account(9L);
 
+// scenario 1
         // scenario 1
         Long balance1 = 100L;
         em.getTransaction().begin();
         em.persist(acc);
         acc.setBalance(balance1);
+        em.persist(acc);
         em.getTransaction().commit();
 //TODO: voeg asserties toe om je verwachte waarde van de attributen te verifieren.
 //TODO: doe dit zowel voor de bovenstaande java objecten als voor opnieuw bij de entitymanager opgevraagde objecten met overeenkomstig Id.
@@ -111,7 +124,6 @@ public class MergeTest {
         assertEquals((Long) 650L, account2.getBalance());  //verklaar
         em.getTransaction().commit();
         em.close();
-
 
     }
 
