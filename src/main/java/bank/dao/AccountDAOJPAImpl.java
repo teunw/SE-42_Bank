@@ -1,10 +1,11 @@
 package bank.dao;
 
 import bank.domain.Account;
-import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaQuery;
+import java.util.List;
 
 public class AccountDAOJPAImpl implements AccountDAO {
 

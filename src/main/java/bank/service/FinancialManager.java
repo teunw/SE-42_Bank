@@ -1,11 +1,11 @@
 package bank.service;
 
-import bank.domain.Account;
 import bank.dao.AccountDAO;
 import bank.dao.AccountDAOJPAImpl;
+import bank.domain.Account;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 
 public class FinancialManager {
