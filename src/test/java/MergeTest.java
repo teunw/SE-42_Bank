@@ -27,10 +27,6 @@ public class MergeTest {
     private EntityManager em;
     private EntityManagerFactory emf;
 
-    @Before
-    public void before() {
-        emf = Persistence.createEntityManagerFactory("bankPU");
-        em = emf.createEntityManager();
     private AccountDAOJPAImpl accountDAOJPA;
 
     @Before
