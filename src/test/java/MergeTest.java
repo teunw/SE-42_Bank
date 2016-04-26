@@ -1,3 +1,4 @@
+import bank.dao.AccountDAO;
 import bank.dao.AccountDAOJPAImpl;
 import bank.domain.Account;
 import org.junit.After;
@@ -10,10 +11,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import java.sql.SQLException;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.*;
 
 /**
  * Created by wouter on 25-4-2016.
@@ -51,6 +49,7 @@ public class MergeTest {
 
     @Test
     public void mergeTest() {
+        AccountDAO accountDAO = new AccountDAOJPAImpl(em);
         Account acc = new Account(1L);
         Account acc2 = new Account(2L);
         Account acc9 = new Account(9L);
@@ -63,9 +62,8 @@ public class MergeTest {
         acc.setBalance(balance1);
         em.persist(acc);
         em.getTransaction().commit();
-//TODO: voeg asserties toe om je verwachte waarde van de attributen te verifieren.
-//TODO: doe dit zowel voor de bovenstaande java objecten als voor opnieuw bij de entitymanager opgevraagde objecten met overeenkomstig Id.
-
+        assertEquals(acc.getBalance(), balance1);
+        assertNotNull(accountDAO.find(acc.getId()));
 
 // scenario 2
         Long balance2a = 211L;
@@ -75,9 +73,7 @@ public class MergeTest {
         acc.setBalance(balance2a);
         acc9.setBalance(balance2a + balance2a);
         em.getTransaction().commit();
-//TODO: voeg asserties toe om je verwachte waarde van de attributen te verifiëren.
-//TODO: doe dit zowel voor de bovenstaande java objecten als voor opnieuw bij de entitymanager opgevraagde objecten met overeenkomstig Id.
-// HINT: gebruik acccountDAO.findByAccountNr
+        assertEquals((Object) acc9.getBalance(), acc.getBalance() * 2);
 
 
 // scenario 3
@@ -87,14 +83,13 @@ public class MergeTest {
         em.getTransaction().begin();
         em.persist(acc);
         acc2 = em.merge(acc);
-        assertTrue(em.contains(acc)); // verklaar
-        assertTrue(em.contains(acc2)); // verklaar
-        assertEquals(acc, acc2);  //verklaar
+        assertTrue(em.contains(acc)); // Omdat account gemerged is met acc2 bevat de entity manager de originele waardes van acc
+        assertTrue(em.contains(acc2)); // Account 2 is ook aanwezig in de entity manager, deze word gebruikt tijdens de merge
+        assertEquals(acc, acc2);  // Door de merge zijn de twee objecten samengevoegd tot een object, dus zijn ze hetzelfde
         acc2.setBalance(balance3b);
         acc.setBalance(balance3c);
         em.getTransaction().commit();
-//TODO: voeg asserties toe om je verwachte waarde van de attributen te verifiëren.
-//TODO: doe dit zowel voor de bovenstaande java objecten als voor opnieuw bij de entitymanager opgevraagde objecten met overeenkomstig Id.
+        assertEquals(acc.getId(), acc2.getId());
 
 
 // scenario 4
@@ -107,17 +102,17 @@ public class MergeTest {
 
         Account account2 = new Account(114L);
         Account tweedeAccountObject = account2;
-        tweedeAccountObject.setBalance(650l);
-        assertEquals((Long) 650L, account2.getBalance());  //verklaar
+        tweedeAccountObject.setBalance(650L);
+        assertEquals((Long) 650L, account2.getBalance()); // De balance is van tevoren gezet op dit aantal
         account2.setId(account.getId());
         em.getTransaction().begin();
         account2 = em.merge(account2);
-        assertSame(account, account2);  //verklaar
-        assertTrue(em.contains(account2));  //verklaar
-        assertFalse(em.contains(tweedeAccountObject));  //verklaar
+        assertSame(account, account2);  // Account 1 en 2 zijn gemerged, daarom zijn ze hetzelfde
+        assertTrue(em.contains(account2));  // Door de merge is dit object in de entitymanager gezet
+        assertFalse(em.contains(tweedeAccountObject));  // De samengevoegde objecten komen niet in de Entity Manager voor omdat hier nooit iets mee gebeurd is binnen de em.
         tweedeAccountObject.setBalance(850l);
-        assertEquals((Long) 650L, account.getBalance());  //verklaar
-        assertEquals((Long) 650L, account2.getBalance());  //verklaar
+        assertEquals((Long) 650L, account.getBalance());  // Door de merge is de balance hetzelfde
+        assertEquals((Long) 650L, account2.getBalance());  // Door de merge is de balance hetzelfde
         em.getTransaction().commit();
         em.close();
 
