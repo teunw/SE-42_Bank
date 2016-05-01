@@ -8,14 +8,13 @@ import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
 import java.sql.SQLException;
 
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 /**
  * Created by Teun on 25-4-2016.
  */
-public class PersistCommitTest {
-
+public class FlushTest {
     private EntityManager em;
 
     @Before
@@ -30,18 +29,17 @@ public class PersistCommitTest {
     }
 
     @Test
-    public void commitTest() {
+    public void flushTest() {
+        Long expected = -100L;
         Account account = new Account(111L);
+        account.setId(expected);
+        assertEquals(expected, account.getId());
         em.getTransaction().begin();
         em.persist(account);
-
-        assertNull(account.getId());
+        em.flush();
         em.getTransaction().commit();
-        System.out.println("AccountId: " + account.getId());
-
-        assertTrue(account.getId() > 0L);
+        assertNotEquals(expected, account.getId());
 
     }
-
 
 }
