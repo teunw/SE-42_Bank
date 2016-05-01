@@ -37,13 +37,13 @@ public class RemoveTest {
         em.persist(acc1);
         em.getTransaction().commit();
         Long id = acc1.getId();
-//Database bevat nu een account.
+        //Database bevat nu een account.
 
         em.remove(acc1);
         assertEquals(id, acc1.getId());
         Account accFound = em.find(Account.class, id);
         assertNull(accFound);
-//TODO: verklaar bovenstaande asserts
+        //TODO: verklaar bovenstaande asserts
 
     }
 

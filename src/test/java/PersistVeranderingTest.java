@@ -37,12 +37,18 @@ public class PersistVeranderingTest {
         }
         @Test
         public void persistVeranderingTest() {
+
             Long expectedBalance = 400L;
+
             Account account = new Account(114L);
+
             em.getTransaction().begin();
             em.persist(account);
+
             account.setBalance(expectedBalance);
+
             em.getTransaction().commit();
+
             assertEquals(expectedBalance, account.getBalance());
 
             //TODO: verklaar de waarde van account.getBalance
