@@ -15,9 +15,9 @@ import static org.junit.Assert.*;
 
 /**
  * Created by wouter on 25-4-2016.
-import static org.junit.Assert.*;
-
-/**
+ * import static org.junit.Assert.*;
+ * <p>
+ * /**
  * Created by Teun on 25-4-2016.
  */
 public class MergeTest {
@@ -55,25 +55,24 @@ public class MergeTest {
         Account acc9 = new Account(9L);
 
 // scenario 1
-        // scenario 1
         Long balance1 = 100L;
         em.getTransaction().begin();
         em.persist(acc);
-        acc.setBalance(balance1);
-        em.persist(acc);
-        em.getTransaction().commit();
-        assertEquals(acc.getBalance(), balance1);
-        assertNotNull(accountDAO.find(acc.getId()));
+        acc.setBalance(balance1); //zet het balans van het lokale acc object
+        em.persist(acc);          //zet het veranderde object in de orm
+        em.getTransaction().commit();//zorgt ervoor dat de transactie ook echt doorgevoerd word
+        assertEquals(acc.getBalance(), balance1);//kijkt of het balans overeen komt met die uit de database
+        assertNotNull(accountDAO.find(acc.getId()));//kijkt of het object nog steeds in de database zit
 
 // scenario 2
         Long balance2a = 211L;
         acc = new Account(2L);
         em.getTransaction().begin();
-        acc9 = em.merge(acc);
-        acc.setBalance(balance2a);
-        acc9.setBalance(balance2a + balance2a);
+        acc9 = em.merge(acc);//merged het account met die uit de database
+        acc.setBalance(balance2a);//zet het balans van het acc object
+        acc9.setBalance(balance2a + balance2a);//zet het balans van het acc9 object
         em.getTransaction().commit();
-        assertEquals((Object) acc9.getBalance(), acc.getBalance() * 2);
+        assertEquals((Object) acc9.getBalance(), acc.getBalance() * 2);//kijkt of de veranderingen ook echt door zijn gevoerd
 
 
 // scenario 3
@@ -119,17 +118,3 @@ public class MergeTest {
     }
 
 }
-//        em.getTransaction().begin();
-//        Account acc = new Account();
-//        Account acc2 = new Account();
-//        Account acc3 = new Account();
-//
-//        Long balance1 = 100L;
-//        em.persist(acc3);
-//        em.persist(acc2);
-//        em.persist(acc);
-//        acc.setBalance(balance1);
-//        em.getTransaction().commit();
-//
-//        assertEquals(acc.getId() + 1, (Object) acc2.getId());
-//        assertEquals(acc.getId() + 2, (Object) acc3.getId());
