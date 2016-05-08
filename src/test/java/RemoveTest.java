@@ -40,8 +40,8 @@ public class RemoveTest {
         //Database bevat nu een account.
 
         em.remove(acc1);
-        assertEquals(id, acc1.getId());
-        Account accFound = em.find(Account.class, id);
+        assertEquals(id, acc1.getId());//laat zien dat het lokaal object wel nog bestaat na .remove
+        Account accFound = em.find(Account.class, id); //maar niet meer in de database
         assertNull(accFound);
         //TODO: verklaar bovenstaande asserts
 
