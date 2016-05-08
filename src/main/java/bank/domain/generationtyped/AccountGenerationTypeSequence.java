@@ -1,29 +1,29 @@
-package bank.domain;
+package bank.domain.generationtyped;
 
 import javax.persistence.*;
-import javax.persistence.metamodel.Type;
 import java.io.Serializable;
 
-@Entity
+@Entity(name = "AccountSeq")
 @NamedQueries({
         @NamedQuery(name = "Account.getAll", query = "select a from Account as a"),
         @NamedQuery(name = "Account.count", query = "select count(a) from Account as a"),
         @NamedQuery(name = "Account.findByAccountNr", query = "select a from Account as a where a.accountNr = :accountNr")
 })
-public class Account implements Serializable {
+@Table(name = "account", schema = "account")
+public class AccountGenerationTypeSequence implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "account_seq")
     private Long Id;
     @Column(unique = true)
     private Long accountNr;
     private Long balance;
     private Long threshold;
 
-    public Account() {
+    public AccountGenerationTypeSequence() {
     }
 
-    public Account(Long accountNr) {
+    public AccountGenerationTypeSequence(Long accountNr) {
         balance = 0L;
         threshold = 0L;
         this.accountNr = accountNr;
@@ -73,9 +73,9 @@ public class Account implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Account)) return false;
+        if (!(o instanceof AccountGenerationTypeSequence)) return false;
 
-        Account account = (Account) o;
+        AccountGenerationTypeSequence account = (AccountGenerationTypeSequence) o;
 
         if (getId() != null ? !getId().equals(account.getId()) : account.getId() != null) return false;
         if (getAccountNr() != null ? !getAccountNr().equals(account.getAccountNr()) : account.getAccountNr() != null)

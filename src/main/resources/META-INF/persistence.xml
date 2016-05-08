@@ -6,6 +6,9 @@
         <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
         <shared-cache-mode>NONE</shared-cache-mode>
         <class>bank.domain.Account</class>
+        <class>bank.domain.generationtyped.AccountGenerationTypeTable</class>
+        <class>bank.domain.generationtyped.AccountGenerationTypeSequence</class>
+
         <properties>
             <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://teunwillems.nl:5432/se42-bank"/>
             <property name="javax.persistence.jdbc.password" value="password"/>
